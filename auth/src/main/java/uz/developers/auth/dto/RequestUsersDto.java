@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsersDto {
+public class RequestUsersDto {
     private Integer Id;
     @NotBlank(message = "FirstName is mandatory")
     private String firstname;
@@ -23,15 +23,15 @@ public class UsersDto {
     private String summary;
     @Length(min = 8)
     private String password;
-    private RegionDto region;
-    private DistrictDto district;
+    private Integer regionId;
+    private Integer districtId;
     private String phoneNumber;
     @Email(message = "Email is not valid")
     private String email;
     private Set<LinksDto> links;
     private ImageDto profilePicture;
-    private Boolean isAuthorized;
-    private Boolean isActive;
+    private Boolean isAuthorized = true;
+    private Boolean isActive = false;
 
 
 }
