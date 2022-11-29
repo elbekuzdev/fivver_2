@@ -3,7 +3,9 @@ package uz.developers.auth.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.developers.auth.dto.RequestUsersDto;
+import uz.developers.auth.service.ImageService;
 import uz.developers.auth.service.RegionService;
 import uz.developers.auth.service.UserService;
 
@@ -17,6 +19,7 @@ public class UsersController {
 
     private final UserService userService;
     private final RegionService regionService;
+    private final ImageService imageService;
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody @Valid RequestUsersDto usersDto) {
@@ -56,6 +59,16 @@ public class UsersController {
     @GetMapping("/getDistrictByRegionId/{regionId}")
     public ResponseEntity<?> findAllDistrict(@PathVariable Integer regionId) {
         return regionService.findByRegionId(regionId);
+    }
+
+    @PostMapping("/addPhoto/{userId}")
+    public ResponseEntity<?> savePhoto(@PathVariable Integer userId, @RequestParam MultipartFile file) {
+        return imageService.save(file, userId);
+    }
+
+    @GetMapping("/getPhoto/{id}")
+    public ResponseEntity<?> savePhoto(@PathVariable Integer id) {
+        return imageService.getPhoto(id);
     }
 
 

@@ -22,9 +22,4 @@ public class Image {
     @Type(type = "org.hibernate.type.ImageType")
     private byte[] imageData;
 
-    public Image(String name, String type, byte[] imageData) {
-        this.name = name;
-        this.type = type;
-        this.imageData = imageData;
-    }
 }

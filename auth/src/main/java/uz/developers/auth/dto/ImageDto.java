@@ -10,7 +10,6 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 public class ImageDto {
     private int id;
-
     private String name;
     private String type;
     @Type(type = "org.hibernate.type.ImageType")
