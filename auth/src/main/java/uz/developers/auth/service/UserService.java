@@ -11,6 +11,7 @@ import uz.developers.auth.entity.Users;
 import uz.developers.auth.mapper.UserMapper;
 import uz.developers.auth.repo.LinksRepo;
 import uz.developers.auth.repo.UserRepo;
+import uz.developers.auth.util.PasswordUtils;
 
 import java.util.*;
 
@@ -20,6 +21,7 @@ public class UserService {
     private final UserRepo userRepo;
     private final UserMapper userMapper;
     private final LinksRepo linksRepo;
+    private final PasswordUtils passwordUtil;
 
     public ResponseEntity<?> save(RequestUsersDto usersDto) {
         try {
@@ -28,6 +30,7 @@ public class UserService {
                 if (!userRepo.existsByPhoneNumberAndIsActive(user.getPhoneNumber(), true)) {
                     if (Objects.equals(user.getDistrict().getRegion().getId(), user.getRegion().getId())) {
                         try {
+                            user.setPassword(passwordUtil.encodePassword(user.getPassword()));
                             Users save = userRepo.save(user);
                             return ResponseEntity.ok(new ResponseDto(200, "saved", toResponse(save)));
                         } catch (Exception e) {
@@ -48,6 +51,7 @@ public class UserService {
             return ResponseEntity.ok(ResponseDto.getSuccess(205, "region or district not found"));
         }
     }
+
     public ResponseEntity<?> update(RequestUsersDto usersDto) {
         try {
             Optional<Users> optionalUser = userRepo.findById(usersDto.getId());
@@ -61,15 +65,14 @@ public class UserService {
                             if (Objects.equals(user.getDistrict().getRegion().getId(), user.getRegion().getId())) {
                                 try {
                                     concat(user, currentUser);
-                                    System.out.println(user.getLinks());
-                                    System.out.println(currentUser.getLinks());
                                     try {
+                                        user.setPassword(passwordUtil.encodePassword(user.getPassword()));
                                         linksRepo.saveAll(user.getLinks());
                                         userRepo.save(user);
                                         return ResponseEntity.ok(new ResponseDto(200, "saved", toResponse(user)));
-                                    }catch (DataIntegrityViolationException e){
+                                    } catch (DataIntegrityViolationException e) {
                                         return ResponseEntity.ok(new ResponseDto(200, "saved", toResponse(user)));
-                                    }catch (Exception e){
+                                    } catch (Exception e) {
                                         return ResponseEntity.ok(ResponseDto.getSuccess(200, "not saved"));
                                     }
 
@@ -96,82 +99,154 @@ public class UserService {
                 e.printStackTrace();
                 return ResponseEntity.ok(ResponseDto.getSuccess(205, "region or district not found"));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.ok(ResponseDto.getSuccess(205, "id null"));
 
         }
 
     }
-    public ResponseEntity<?> findByEmail(String email){
+
+    public ResponseEntity<?> findByEmail(String email) {
         Optional<Users> optionalUsers = userRepo.findByEmailAndIsActive(email, true);
-        if (optionalUsers.isPresent()){
+        if (optionalUsers.isPresent()) {
             Users user = optionalUsers.get();
             return ResponseEntity.ok(new ResponseDto(200, "ok", toResponse(user)));
-        }else{
+        } else {
             return ResponseEntity.ok(ResponseDto.getSuccess(205, "user not found"));
         }
     }
-    private void concat(Users user, Users currentUser){
-        if (user.getFirstname() == null){
+
+    public ResponseEntity<?> changePassword(Integer userId, String oldPassword, String newPassword) {
+        Optional<Users> optionalUser = userRepo.findByIdAndIsActive(userId, true);
+        if (optionalUser.isPresent()) {
+            Users user = optionalUser.get();
+            if (passwordUtil.match(newPassword, oldPassword)) {
+                user.setPassword(passwordUtil.encodePassword(newPassword));
+                try {
+                    userRepo.save(user);
+                    return ResponseEntity.ok(ResponseDto.getSuccess(205, "successfully saved"));
+                } catch (Exception e) {
+                    return ResponseEntity.ok(ResponseDto.getSuccess(205, "not updated"));
+                }
+            } else {
+                return ResponseEntity.ok(ResponseDto.getSuccess(205, "old password is incorrect"));
+            }
+        } else {
+            return ResponseEntity.ok(ResponseDto.getSuccess(205, "user not found"));
+        }
+    }
+    public ResponseEntity<?> changePassword(String email, String oldPassword, String newPassword) {
+        Optional<Users> optionalUser = userRepo.findByEmailAndIsActive(email, true);
+        if (optionalUser.isPresent()) {
+            Users user = optionalUser.get();
+            if (passwordUtil.match(newPassword, oldPassword)) {
+                user.setPassword(passwordUtil.encodePassword(newPassword));
+                try {
+                    userRepo.save(user);
+                    return ResponseEntity.ok(ResponseDto.getSuccess(205, "successfully saved"));
+                } catch (Exception e) {
+                    return ResponseEntity.ok(ResponseDto.getSuccess(205, "not updated"));
+                }
+            } else {
+                return ResponseEntity.ok(ResponseDto.getSuccess(205, "old password is incorrect"));
+            }
+        } else {
+            return ResponseEntity.ok(ResponseDto.getSuccess(205, "user not found"));
+        }
+    }
+
+    public ResponseEntity<?> login(String username, String password)    {
+        if (username.contains("@")){
+            Optional<Users> optionalUser = userRepo.findByEmailAndIsActive(username, true);
+            if (optionalUser.isPresent()){
+                Users user = optionalUser.get();
+                if (passwordUtil.match(password, user.getPassword())){
+                    return ResponseEntity.ok(new ResponseDto(200, "ok", toResponse(user)));
+                }else{
+                    return ResponseEntity.ok(ResponseDto.getSuccess(205, "email or password is incorrect"));
+                }
+            }else{
+                return ResponseEntity.ok(ResponseDto.getSuccess(205, "user not found"));
+            }
+        }else{
+            Optional<Users> optionalUser = userRepo.findByPhoneNumberAndIsActive(username, true);
+            if (optionalUser.isPresent()){
+                Users user = optionalUser.get();
+                if (passwordUtil.match(password, user.getPassword())){
+                    return ResponseEntity.ok(new ResponseDto(200, "ok", toResponse(user)));
+                }else{
+                    return ResponseEntity.ok(ResponseDto.getSuccess(205, "phone number or password is incorrect"));
+                }
+            }else{
+                return ResponseEntity.ok(ResponseDto.getSuccess(205, "user not found"));
+            }
+        }
+    }
+
+    private void concat(Users user, Users currentUser) {
+        if (user.getFirstname() == null) {
             user.setFirstname(currentUser.getFirstname());
         }
-        if (user.getLastname() == null){
+        if (user.getLastname() == null) {
             user.setLastname(currentUser.getLastname());
         }
-        if (user.getProfession() == null){
+        if (user.getProfession() == null) {
             user.setProfession(currentUser.getProfession());
         }
-        if (user.getProfession() == null){
+        if (user.getProfession() == null) {
             user.setProfession(currentUser.getProfession());
         }
-        if (user.getSummary() == null){
+        if (user.getSummary() == null) {
             user.setSummary(currentUser.getSummary());
         }
-        if (user.getSummary() == null){
+        if (user.getSummary() == null) {
             user.setSummary(currentUser.getSummary());
         }
-        if(user.getRegion() == null){
+        if (user.getRegion() == null) {
             user.setRegion(currentUser.getRegion());
         }
-        if(user.getRegion() == null){
+        if (user.getRegion() == null) {
             user.setRegion(currentUser.getRegion());
         }
-        if(user.getDistrict() == null){
+        if (user.getDistrict() == null) {
             user.setDistrict(currentUser.getDistrict());
         }
-        if(user.getPhoneNumber() == null){
+        if (user.getPhoneNumber() == null) {
             user.setPhoneNumber(currentUser.getPhoneNumber());
         }
-        if(user.getEmail() == null){
+        if (user.getEmail() == null) {
             user.setEmail(currentUser.getEmail());
         }
-        if(user.getRegion() == null){
+        if (user.getRegion() == null) {
             user.setRegion(currentUser.getRegion());
         }
         user.setPassword(currentUser.getPassword());
         user.setProfilePicture(currentUser.getProfilePicture());
         Set<Links> links;
-        if (user.getLinks() != null){
+        if (user.getLinks() != null) {
             links = user.getLinks();
-        }else{
+        } else {
             links = new HashSet<>();
         }
         links.addAll(currentUser.getLinks());
         user.setLinks(links);
     }
-    private Map<String, Object> toResponse(Users user){
+
+    private Map<String, Object> toResponse(Users user) {
         Map<String, Object> response = new HashMap<>();
-            response.put("id", user.getId());
-            response.put("firstname", user.getFirstname());
-            response.put("lastname", user.getLastname());
-            response.put("profession", user.getProfession());
-            response.put("summary", user.getSummary());
-            response.put("region", user.getRegion().getName());
-            response.put("district", user.getDistrict().getName());
-            response.put("phone_number", user.getPhoneNumber());
-            response.put("email", user.getEmail());
-            response.put("links", user.getLinks());
+        response.put("id", user.getId());
+        response.put("firstname", user.getFirstname());
+        response.put("lastname", user.getLastname());
+        response.put("profession", user.getProfession());
+        response.put("summary", user.getSummary());
+        response.put("region", user.getRegion().getName());
+        response.put("district", user.getDistrict().getName());
+        response.put("phone_number", user.getPhoneNumber());
+        response.put("email", user.getEmail());
+        response.put("links", user.getLinks());
         return response;
     }
+
+
 }
