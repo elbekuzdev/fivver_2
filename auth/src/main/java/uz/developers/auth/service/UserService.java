@@ -121,7 +121,7 @@ public class UserService {
         Optional<Users> optionalUser = userRepo.findByIdAndIsActive(userId, true);
         if (optionalUser.isPresent()) {
             Users user = optionalUser.get();
-            if (passwordUtil.match(newPassword, oldPassword)) {
+            if (passwordUtil.match(oldPassword, user.getPassword())) {
                 user.setPassword(passwordUtil.encodePassword(newPassword));
                 try {
                     userRepo.save(user);

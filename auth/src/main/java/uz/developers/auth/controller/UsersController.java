@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.developers.auth.dto.RequestUsersDto;
+import uz.developers.auth.service.RegionService;
 import uz.developers.auth.service.UserService;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
 
 @RestController
@@ -14,6 +16,7 @@ import javax.validation.Valid;
 public class UsersController {
 
     private final UserService userService;
+    private final RegionService regionService;
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody @Valid RequestUsersDto usersDto) {
@@ -38,6 +41,21 @@ public class UsersController {
     @PutMapping("/changePassword/{id}")
     public ResponseEntity<?> changePassword(@PathVariable Integer id, @RequestParam String oldPassword, @RequestParam String newPassword) {
         return userService.changePassword(id, oldPassword, newPassword);
+    }
+
+    @GetMapping("/getRegions")
+    public ResponseEntity<?> findAllRegion() {
+        return regionService.findAllRegion();
+    }
+
+    @GetMapping("/getDistricts")
+    public ResponseEntity<?> findAllDistrict() {
+        return regionService.findAllDistrict();
+    }
+
+    @GetMapping("/getDistrictByRegionId/{regionId}")
+    public ResponseEntity<?> findAllDistrict(@PathVariable Integer regionId) {
+        return regionService.findByRegionId(regionId);
     }
 
 
