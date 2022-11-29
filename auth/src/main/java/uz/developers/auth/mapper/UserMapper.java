@@ -28,7 +28,8 @@ public class UserMapper {
         users.setLastname(usersDto.getLastname());
         users.setProfession(usersDto.getProfession());
         users.setSummary(usersDto.getSummary());
-        users.setPassword(users.getPassword());
+        users.setPassword(usersDto.getPassword());
+        users.setPhoneNumber(usersDto.getPhoneNumber());
         {
             Optional<Region> optionalRegion = regionRepo.findById(usersDto.getRegionId());
             if (optionalRegion.isPresent()){
@@ -42,7 +43,7 @@ public class UserMapper {
             if (optionalDistrict.isPresent()){
                 users.setDistrict(optionalDistrict.get());
             }else{
-                throw new Exception();
+                throw new Exception("district not found");
             }
         }
         users.setEmail(usersDto.getEmail());

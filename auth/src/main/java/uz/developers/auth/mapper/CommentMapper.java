@@ -18,27 +18,29 @@ public class CommentMapper {
 
     public Comment toEntity(RequestCommentDto commentDto) throws Exception {
         Comment comment = new Comment();
-        comment.setId(commentDto.getId());
-        comment.setText(commentDto.getText());
-        {
-            Optional<Users> optionalUser = userRepo.findByIdAndIsActive(commentDto.getFromUserId(), true);
-            if (optionalUser.isPresent()) {
-                Users from = optionalUser.get();
-                comment.setFrom(from);
-            } else {
-                throw new Exception("from user not found");
+        if (commentDto != null){
+            comment.setId(commentDto.getId());
+            comment.setText(commentDto.getText());
+            {
+                Optional<Users> optionalUser = userRepo.findByIdAndIsActive(commentDto.getFromUserId(), true);
+                if (optionalUser.isPresent()) {
+                    Users from = optionalUser.get();
+                    comment.setFrom(from);
+                } else {
+                    throw new Exception("from user not found");
+                }
             }
-        }
-        {
-            Optional<Users> optionalUser1 = userRepo.findByIdAndIsActive(commentDto.getFromUserId(), true);
-            if (optionalUser1.isPresent()) {
-                Users to = optionalUser1.get();
-                comment.setTo(to);
-            } else {
-                throw new Exception("to user not found");
+            {
+                Optional<Users> optionalUser1 = userRepo.findByIdAndIsActive(commentDto.getFromUserId(), true);
+                if (optionalUser1.isPresent()) {
+                    Users to = optionalUser1.get();
+                    comment.setTo(to);
+                } else {
+                    throw new Exception("to user not found");
+                }
             }
+            comment.setCreationTime(commentDto.getCreationTime());
         }
-        comment.setCreationTime(commentDto.getCreationTime());
         return comment;
     }
 

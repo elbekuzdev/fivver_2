@@ -11,9 +11,11 @@ import java.util.Set;
 public class LinksMapper {
     public  Links toEntity(LinksDto linksdto) {
         Links link = new Links();
-        link.setId(linksdto.getId());
-        link.setName(linksdto.getName());
-        link.setUrl(linksdto.getUrl());
+        if (linksdto != null){
+            link.setId(linksdto.getId());
+            link.setName(linksdto.getName());
+            link.setUrl(linksdto.getUrl());
+        }
         return link;
     }
 
@@ -26,9 +28,12 @@ public class LinksMapper {
 
     public  LinksDto toDto(Links links) {
         LinksDto linksDto = new LinksDto();
-        linksDto.setId(links.getId());
-        linksDto.setName(links.getName());
-        linksDto.setUrl(links.getUrl());
+
+        if (links != null){
+            linksDto.setId(links.getId());
+            linksDto.setName(links.getName());
+            linksDto.setUrl(links.getUrl());
+        }
         return linksDto;
     }
 
