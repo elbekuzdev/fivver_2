@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestCommentDto {
-
     private Integer id;
     private String text;
     private Integer fromUserId;
