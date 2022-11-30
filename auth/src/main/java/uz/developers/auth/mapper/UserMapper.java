@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uz.developers.auth.dto.RequestUsersDto;
+import uz.developers.auth.dto.ResponseUserDto;
 import uz.developers.auth.entity.District;
 import uz.developers.auth.entity.Region;
 import uz.developers.auth.entity.Users;
@@ -53,5 +54,18 @@ public class UserMapper {
         users.setIsActive(usersDto.getIsActive());
         return users;
 
+    }
+
+    public ResponseUserDto toDto(Users user){
+        ResponseUserDto userDto = new ResponseUserDto();
+        userDto.setId(user.getId());
+        userDto.setFirstname(user.getFirstname());
+        userDto.setLastname(user.getLastname());
+        userDto.setProfession(user.getProfession());
+        userDto.setSummary(user.getSummary());
+        userDto.setPhoneNumber(user.getPhoneNumber());
+        userDto.setEmail(user.getEmail());
+        userDto.setLinks(linksMapper.toDto(user.getLinks()));
+        return userDto;
     }
 }

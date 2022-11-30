@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uz.developers.auth.dto.RequestCommentDto;
 import uz.developers.auth.dto.RequestUsersDto;
+import uz.developers.auth.service.CommentService;
 import uz.developers.auth.service.ImageService;
 import uz.developers.auth.service.RegionService;
 import uz.developers.auth.service.UserService;
@@ -20,6 +22,7 @@ public class UsersController {
     private final UserService userService;
     private final RegionService regionService;
     private final ImageService imageService;
+    private final CommentService commentService;
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody @Valid RequestUsersDto usersDto) {
@@ -67,9 +70,21 @@ public class UsersController {
     }
 
     @GetMapping("/getPhoto/{id}")
-    public ResponseEntity<?> savePhoto(@PathVariable Integer id) {
+    public ResponseEntity<?> getPhoto(@PathVariable Integer id) {
         return imageService.getPhoto(id);
     }
+
+    @PostMapping("/saveComment")
+    public ResponseEntity<?> saveComment(@RequestBody @Valid RequestCommentDto commentDto){
+        return commentService.save(commentDto);
+    }
+
+    @GetMapping("/getComments/{id}")
+    public ResponseEntity<?> getComments(@PathVariable Integer id){
+        return commentService.getById(id);
+    }
+
+
 
 
 }
