@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.developers.auth.dto.RequestUsersDto;
 import uz.developers.auth.dto.ResponseDto;
+import uz.developers.auth.dto.ResponseUserDto;
 import uz.developers.auth.entity.Links;
 import uz.developers.auth.entity.Users;
 import uz.developers.auth.mapper.UserMapper;
@@ -233,19 +234,8 @@ public class UserService {
         user.setLinks(links);
     }
 
-    private Map<String, Object> toResponse(Users user) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("id", user.getId());
-        response.put("firstname", user.getFirstname());
-        response.put("lastname", user.getLastname());
-        response.put("profession", user.getProfession());
-        response.put("summary", user.getSummary());
-        response.put("region", user.getRegion().getName());
-        response.put("district", user.getDistrict().getName());
-        response.put("phone_number", user.getPhoneNumber());
-        response.put("email", user.getEmail());
-        response.put("links", user.getLinks());
-        return response;
+    private ResponseUserDto toResponse(Users user) {
+        return userMapper.toDto(user);
     }
 
 
