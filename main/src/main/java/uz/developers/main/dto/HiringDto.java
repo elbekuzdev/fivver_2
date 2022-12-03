@@ -20,7 +20,7 @@ public class HiringDto {
     private String title;
     @NotBlank(message = "Description is mandatory")
     private String  description;
-    private State state = State.WAITING;
+    private StateDto stateDto = StateDto.WAITING;
     private Users user;
     @NotNull(message = "Start price is mandatory")
     private Double startPrice = 0.0;
