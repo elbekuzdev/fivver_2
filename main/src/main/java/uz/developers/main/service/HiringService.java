@@ -43,8 +43,8 @@ public class HiringService {
         return ResponseEntity.ok(new ResponseDto(200, "ok", hirings));
     }
 
-    public ResponseEntity<ResponseDto> update(Integer id, HiringDto hiringDto) {
-        Optional<Hiring> optionalHiring = hiringRepo.findByIdAndIsActive(id, true);
+    public ResponseEntity<ResponseDto> update(HiringDto hiringDto) {
+        Optional<Hiring> optionalHiring = hiringRepo.findByIdAndIsActive(hiringDto.getId(), true);
         if (optionalHiring.isPresent()) {
             Hiring hiring = optionalHiring.get();
             Hiring requestHiring = HiringMapper.toEntity(hiringDto);

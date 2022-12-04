@@ -20,7 +20,7 @@ public class HiringPartnerDto {
     private String title;
     @NotNull
     private String  description;
-    private State state = State.WAITING;
+    private StateDto stateDto = StateDto.WAITING;
     private Users user;
     @NotNull
     private Double startPrice = 0.0;
