@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.developers.main.dto.HiringDto;
 import uz.developers.main.dto.ResponseDto;
+import uz.developers.main.dto.ResponseHiringDto;
 import uz.developers.main.entity.Hashtag;
 import uz.developers.main.entity.Hiring;
 import uz.developers.main.mapper.HiringMapper;
@@ -21,8 +22,7 @@ public class HiringService {
 
     public ResponseEntity<ResponseDto> save(HiringDto hiringDto) {
         try {
-            hiringRepo.save(HiringMapper.toEntity(hiringDto));
-            return ResponseEntity.ok(ResponseDto.getSuccess(200, "ok"));
+            return ResponseEntity.ok(ResponseDto.getSuccess(hiringRepo.save(HiringMapper.toEntity(hiringDto))));
         } catch (Exception e) {
             return ResponseEntity.ok(ResponseDto.getSuccess(211, "not saved"));
         }
@@ -30,16 +30,15 @@ public class HiringService {
 
     public ResponseEntity<ResponseDto> getById(Integer id) {
         Optional<Hiring> byId = hiringRepo.findByIdAndIsActive(id, true);
-        return byId.map(hiring -> ResponseEntity.ok(new ResponseDto(200, "ok", hiring))).orElseGet(() -> ResponseEntity.ok(new ResponseDto(404, "id not found", null)));
+        return byId.map(hiring -> ResponseEntity.ok(new ResponseDto(200, "ok", HiringMapper.toDto(hiring)))).orElseGet(() -> ResponseEntity.ok(new ResponseDto(404, "id not found", null)));
     }
 
     public ResponseEntity<ResponseDto> getAll() {
         List<Hiring> all = hiringRepo.findByIsActive(true);
-        LinkedList<HiringDto> hirings = new LinkedList<>();
+        LinkedList<ResponseHiringDto> hirings = new LinkedList<>();
         for (Hiring h : all) {
             hirings.add(HiringMapper.toDto(h));
         }
-
         return ResponseEntity.ok(new ResponseDto(200, "ok", hirings));
     }
 
