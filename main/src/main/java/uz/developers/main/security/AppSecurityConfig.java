@@ -47,9 +47,10 @@ public class AppSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests().antMatchers("/main/token/accessToken","/main/token/refreshToken").permitAll()
-                .antMatchers(HttpMethod.GET,"/main/hiring/getAll","/main/hiring/getById{id}","/main/hiringPartner/getAll","/main/hiringPartner/getById{id}").permitAll()
-                .anyRequest().authenticated();
+//                .authorizeRequests().antMatchers("/main/token/accessToken","/main/token/refreshToken").permitAll()
+//                .antMatchers(HttpMethod.GET,"/main/hiring/getAll","/main/hiring/getById{id}","/main/hiringPartner/getAll","/main/hiringPartner/getById{id}").permitAll()
+//                .anyRequest().authenticated();
+                .authorizeRequests().anyRequest().permitAll();
         return http.build();
     }
 }
