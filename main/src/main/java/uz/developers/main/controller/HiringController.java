@@ -33,10 +33,12 @@ public class HiringController {
         return hiringService.getById(id);
     }
 
+
 //    @PreAuthorize("hasAnyRole('UPDATE')")
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseDto> update(@PathVariable Integer id, @Valid@RequestBody HiringDto hiringDto) {
         return hiringService.update(id, hiringDto);
+
     }
 
 //    @PreAuthorize("hasAnyRole('DELETE')")

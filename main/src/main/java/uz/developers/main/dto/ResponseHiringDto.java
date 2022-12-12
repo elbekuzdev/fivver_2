@@ -6,26 +6,20 @@ import lombok.NoArgsConstructor;
 import uz.developers.main.entity.State;
 import uz.developers.main.entity.Users;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HiringDto {
+public class ResponseHiringDto {
     private Integer id;
-    @NotBlank(message = "Title is mandatory")
     private String title;
-    @NotBlank(message = "Description is mandatory")
     private String  description;
-    private StateDto stateDto = StateDto.WAITING;
+    private State state;
     private Users user;
-    @NotNull(message = "Start price is mandatory")
-    private Double startPrice = 0.0;
+    private Double startPrice;
     private Double price;
     private Set<HashTagDto> tags;
     private Timestamp creationTime;
-    private boolean isActive = true;
 }

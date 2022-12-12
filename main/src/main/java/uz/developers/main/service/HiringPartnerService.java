@@ -28,7 +28,7 @@ public class HiringPartnerService {
         HiringPartner hiringPartner = HiringPartnerMapper.toEntity(hiringPartnerDto);
         HiringPartner save = hiringPartnerRepo.save(hiringPartner);
         if (save.getId() > 0) {
-            return ResponseDto.getSuccess(200, "saved");
+            return ResponseDto.getSuccess(save);
         }
         return ResponseDto.getSuccess(202, "not saved");
     }
