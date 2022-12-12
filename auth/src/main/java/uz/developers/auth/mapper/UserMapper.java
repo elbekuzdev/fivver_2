@@ -1,7 +1,5 @@
 package uz.developers.auth.mapper;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uz.developers.auth.dto.RequestUsersDto;

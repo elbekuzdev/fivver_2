@@ -16,7 +16,7 @@ import javax.validation.Valid;
 public class HiringPartnerController {
     private final HiringPartnerService hiringPartnerService;
 
-    @PreAuthorize("hasAnyRole('CREATE')")
+//    @PreAuthorize("hasAnyRole('CREATE')")
     @PostMapping("/add")
     public ResponseDto save(@Valid @RequestBody HiringPartnerDto hiringpartnerDto) {
         return hiringPartnerService.addPartner(hiringpartnerDto);
@@ -32,13 +32,13 @@ public class HiringPartnerController {
         return hiringPartnerService.getById(id);
     }
 
-    @PreAuthorize("hasAnyRole('UPDATE')")
+//    @PreAuthorize("hasAnyRole('UPDATE')")
     @PutMapping("/update/{id}")
     public ResponseDto update(@PathVariable Integer id, @Valid @RequestBody HiringPartnerDto hiringpartnerDto){
         return hiringPartnerService.update(id, hiringpartnerDto);
     }
 
-    @PreAuthorize("hasAnyRole('DELETE')")
+//    @PreAuthorize("hasAnyRole('DELETE')")
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable Integer id){
         return hiringPartnerService.deleteById(id);

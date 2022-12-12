@@ -84,7 +84,4 @@ public class UsersController {
         return commentService.getById(id);
     }
 
-
-
-
 }

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
     private String firstname;
     private String lastname;
     private String profession;
