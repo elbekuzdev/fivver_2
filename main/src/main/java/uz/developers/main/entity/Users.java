@@ -33,7 +33,6 @@ public class Users implements UserDetails {
     private String phoneNumber;
     private String email;
     private Boolean isactive = true;
-    private CommonsMultipartFile profilePicture;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Permissions> permissions;

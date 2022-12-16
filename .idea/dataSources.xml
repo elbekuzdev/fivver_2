@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/fivver</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="fivver@3.92.202.78" uuid="663a9ea3-23ff-434f-bac1-a7dae6f93922">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://3.92.202.78:5432/fivver</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
