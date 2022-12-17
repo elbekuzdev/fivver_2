@@ -17,7 +17,7 @@ public class ResponseHiringDto {
     private String title;
     private String  description;
     private State state;
-    private Users user;
+    private ResponseUser user;
     private Double startPrice;
     private Double price;
     private Set<HashTagDto> tags;
