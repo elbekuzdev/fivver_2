@@ -11,8 +11,9 @@ import javax.validation.UnexpectedTypeException;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {
-    @ExceptionHandler(value = {MethodArgumentNotValidException.class, InvalidFormatException.class, UnexpectedTypeException.class, BadCredentialsException.class})
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class, InvalidFormatException.class, UnexpectedTypeException.class, BadCredentialsException.class, Exception.class})
     public ResponseDto methodValidException(Exception e){
+        System.out.println(e.getMessage());
         return new ResponseDto(-1, e.getMessage(), null);
     }
 }

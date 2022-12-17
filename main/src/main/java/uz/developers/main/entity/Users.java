@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -32,14 +31,10 @@ public class Users implements UserDetails {
     private District district;
     private String phoneNumber;
     private String email;
-    private Boolean isactive = true;
+    private Boolean isActive = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Permissions> permissions;
-
-    Users(Set<Permissions> permissions){
-        this.permissions = permissions;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
