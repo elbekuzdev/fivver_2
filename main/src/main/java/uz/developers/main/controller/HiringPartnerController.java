@@ -19,7 +19,7 @@ public class HiringPartnerController {
 //    @PreAuthorize("hasAnyRole('CREATE')")
     @PostMapping("/add")
     public ResponseDto save(@Valid @RequestBody HiringPartnerDto hiringpartnerDto) {
-        return hiringPartnerService.addPartner(hiringpartnerDto);
+        return hiringPartnerService.save(hiringpartnerDto);
     }
 
     @GetMapping("/getAll")

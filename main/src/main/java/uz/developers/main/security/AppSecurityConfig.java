@@ -24,10 +24,10 @@ public class AppSecurityConfig {
     private final UserService userService;
     private final JwtFilter jwtFilter;
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Bean
     public DaoAuthenticationProvider provider(){
@@ -47,10 +47,10 @@ public class AppSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-//                .authorizeRequests().antMatchers("/main/token/accessToken","/main/token/refreshToken").permitAll()
-//                .antMatchers(HttpMethod.GET,"/main/hiring/getAll","/main/hiring/getById{id}","/main/hiringPartner/getAll","/main/hiringPartner/getById{id}").permitAll()
-//                .anyRequest().authenticated();
-                .authorizeRequests().anyRequest().permitAll();
+                .authorizeRequests().antMatchers("/main/token/accessToken","/main/token/refreshToken").permitAll()
+                .antMatchers(HttpMethod.GET,"/main/hiring/getAll","/main/hiring/getById{id}","/main/hiringPartner/getAll","/main/hiringPartner/getById{id}").permitAll()
+                .anyRequest().authenticated();
+//                .authorizeRequests().anyRequest().permitAll();
         return http.build();
     }
 }

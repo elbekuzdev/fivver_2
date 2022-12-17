@@ -1,12 +1,15 @@
 package uz.developers.main.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import uz.developers.main.dto.HiringPartnerDto;
 import uz.developers.main.dto.ResponseDto;
 import uz.developers.main.entity.Hashtag;
 import uz.developers.main.entity.HiringPartner;
 import uz.developers.main.entity.Partner;
+import uz.developers.main.entity.Users;
 import uz.developers.main.mapper.HiringPartnerMapper;
 import uz.developers.main.repo.HashtagRepo;
 import uz.developers.main.repo.HiringPartnerRepo;
@@ -23,9 +26,12 @@ public class HiringPartnerService {
     private final HiringPartnerRepo hiringPartnerRepo;
     private final PartnerRepo partnerRepo;
     private final HashtagRepo hashtagsRepo;
+    private final UserService userService;
 
-    public ResponseDto addPartner(HiringPartnerDto hiringPartnerDto) {
+    public ResponseDto save(HiringPartnerDto hiringPartnerDto) {
+        System.out.println("salom");
         HiringPartner hiringPartner = HiringPartnerMapper.toEntity(hiringPartnerDto);
+        hiringPartner.setUser(getCurrentUser());
         HiringPartner save = hiringPartnerRepo.save(hiringPartner);
         if (save.getId() > 0) {
             return ResponseDto.getSuccess(save);
@@ -90,5 +96,10 @@ public class HiringPartnerService {
 
         }
         return ResponseDto.getSuccess(300, "not found");
+    }
+
+    private Users getCurrentUser(){
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (Users) userService.loadUserByUsername(email);
     }
 }

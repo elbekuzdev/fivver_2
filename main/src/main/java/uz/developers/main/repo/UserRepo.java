@@ -6,5 +6,5 @@ import uz.developers.main.entity.Users;
 import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<Users,Integer> {
-    Optional<Users> findByEmailAndIsactive(String email,Boolean isactive);
+    Optional<Users> findByEmailAndIsActive(String email,Boolean isactive);
 }
