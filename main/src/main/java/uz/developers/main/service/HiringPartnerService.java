@@ -55,7 +55,7 @@ public class HiringPartnerService {
 
     public ResponseDto update(Integer id, HiringPartnerDto hiringPartnerDto) {
         Optional<HiringPartner> hp = hiringPartnerRepo.findById(id);
-        if (hp.isPresent()) {
+        if (hp.isPresent() && hp.get().getUser().getId() == getCurrentUser().getId()){
             HiringPartner hiringPartner = hp.get();
             HiringPartner requestHiringPartner = HiringPartnerMapper.toEntity(hiringPartnerDto);
             Set<Hashtag> hashtags = null;
@@ -88,7 +88,7 @@ public class HiringPartnerService {
     public ResponseDto deleteById(Integer id) {
 
         Optional<HiringPartner> hp = hiringPartnerRepo.findById(id);
-        if (hp.isPresent()) {
+        if (hp.isPresent() && hp.get().getUser().getId() == getCurrentUser().getId()) {
             HiringPartner hiringPartner = hp.get();
             hiringPartner.setIsActive(false);
             hiringPartnerRepo.save(hiringPartner);
