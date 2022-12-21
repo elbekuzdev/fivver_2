@@ -40,8 +40,6 @@ public class HiringPartnerService {
     }
 
     public List<HiringPartner> getAll() {
-
-
         return hiringPartnerRepo.findByIsActive(true);
     }
 
@@ -53,8 +51,8 @@ public class HiringPartnerService {
         return ResponseDto.getSuccess(300, "id is invalid");
     }
 
-    public ResponseDto update(Integer id, HiringPartnerDto hiringPartnerDto) {
-        Optional<HiringPartner> hp = hiringPartnerRepo.findById(id);
+    public ResponseDto update(HiringPartnerDto hiringPartnerDto) {
+        Optional<HiringPartner> hp = hiringPartnerRepo.findById(hiringPartnerDto.getId());
         if (hp.isPresent() && hp.get().getUser().getId() == getCurrentUser().getId()){
             HiringPartner hiringPartner = hp.get();
             HiringPartner requestHiringPartner = HiringPartnerMapper.toEntity(hiringPartnerDto);
@@ -93,7 +91,6 @@ public class HiringPartnerService {
             hiringPartner.setIsActive(false);
             hiringPartnerRepo.save(hiringPartner);
             return ResponseDto.getSuccess(200, "deleted");
-
         }
         return ResponseDto.getSuccess(300, "not found");
     }

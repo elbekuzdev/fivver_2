@@ -33,9 +33,9 @@ public class HiringPartnerController {
     }
 
 //    @PreAuthorize("hasAnyRole('UPDATE')")
-    @PutMapping("/update/{id}")
-    public ResponseDto update(@PathVariable Integer id, @Valid @RequestBody HiringPartnerDto hiringpartnerDto){
-        return hiringPartnerService.update(id, hiringpartnerDto);
+    @PutMapping("/update")
+    public ResponseDto update(@Valid @RequestBody HiringPartnerDto hiringpartnerDto){
+        return hiringPartnerService.update(hiringpartnerDto);
     }
 
 //    @PreAuthorize("hasAnyRole('DELETE')")
