@@ -24,7 +24,7 @@ public class HiringPartnerController {
 
     @GetMapping("/getAll")
     public ResponseDto getAll(){
-        return ResponseDto.getSuccess(hiringPartnerService.getAll());
+        return hiringPartnerService.getAll();
     }
 
     @GetMapping("/getById/{id}")

@@ -17,7 +17,7 @@ import uz.developers.main.service.HashTagService;
 public class HashTagController {
     private final HashTagService hashTagService;
 
-    @PreAuthorize("hasAnyRole('DELETE')")
+//    @PreAuthorize("hasAnyRole('DELETE')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseDto> delete(@PathVariable Integer id){
         return hashTagService.delete(id);
