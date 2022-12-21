@@ -2,12 +2,15 @@ package uz.developers.main.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import uz.developers.main.dto.HiringDto;
 import uz.developers.main.dto.ResponseDto;
 import uz.developers.main.dto.ResponseHiringDto;
 import uz.developers.main.entity.Hashtag;
 import uz.developers.main.entity.Hiring;
+import uz.developers.main.entity.Users;
 import uz.developers.main.mapper.HiringMapper;
 import uz.developers.main.repo.HashtagRepo;
 import uz.developers.main.repo.HiringRepo;
@@ -19,10 +22,14 @@ import java.util.*;
 public class HiringService {
     private final HiringRepo hiringRepo;
     private final HashtagRepo hashtagsRepo;
+    private final UserService userService;
 
     public ResponseEntity<ResponseDto> save(HiringDto hiringDto) {
         try {
-            return ResponseEntity.ok(ResponseDto.getSuccess(hiringRepo.save(HiringMapper.toEntity(hiringDto))));
+            Hiring hiring = HiringMapper.toEntity(hiringDto);
+            hiring.setUser(getCurrentUser());
+            hiringRepo.save(hiring);
+            return ResponseEntity.ok(ResponseDto.getSuccess(200, "saved"));
         } catch (Exception e) {
             return ResponseEntity.ok(ResponseDto.getSuccess(211, "not saved"));
         }
@@ -77,5 +84,10 @@ public class HiringService {
             return ResponseEntity.ok(new ResponseDto(200, "id not found", null));
 
         }
+    }
+
+    private Users getCurrentUser(){
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return  (Users) userService.loadUserByUsername(username);
     }
 }

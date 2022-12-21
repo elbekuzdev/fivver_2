@@ -16,14 +16,14 @@ public class PartnerController {
 
     private final PartnerService partnerService;
 
-    @PreAuthorize("hasAnyRole('UPDATE')")
+//    @PreAuthorize("hasAnyRole('UPDATE')")
     @PutMapping("/update/{id}")
     public ResponseDto update(@PathVariable Integer id, @Valid@RequestBody PartnerDto partnerDto){
         partnerDto.setId(id);
         return partnerService.update(id, partnerDto);
     }
 
-    @PreAuthorize("hasAnyRole('DELETE')")
+//    @PreAuthorize("hasAnyRole('DELETE')")
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable Integer id){
         return partnerService.deleteById(id);
