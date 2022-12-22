@@ -51,7 +51,7 @@ public class HiringService {
 
     public ResponseEntity<ResponseDto> update(HiringDto hiringDto) {
         Optional<Hiring> optionalHiring = hiringRepo.findByIdAndIsActive(hiringDto.getId(), true);
-        if (optionalHiring.isPresent()) {
+        if (optionalHiring.isPresent() && hiringDto.getUser().getId() == getCurrentUser().getId()) {
             Hiring hiring = optionalHiring.get();
             Hiring requestHiring = HiringMapper.toEntity(hiringDto);
             Set<Hashtag> tags = null;
@@ -75,7 +75,7 @@ public class HiringService {
 
     public ResponseEntity<ResponseDto> deleteById(Integer id) {
         Optional<Hiring> byIdAndActive = hiringRepo.findByIdAndIsActive(id, true);
-        if (byIdAndActive.isPresent()) {
+        if (byIdAndActive.isPresent() && byIdAndActive.get().getUser().getId() == getCurrentUser().getId()) {
             Hiring hiring = byIdAndActive.get();
             hiring.setIsActive(false);
             hiringRepo.save(hiring);
