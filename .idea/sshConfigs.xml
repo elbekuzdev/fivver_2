@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="54.92.244.157" id="350d6274-803b-4971-b8ff-c7d189bebb81" keyPath="$USER_HOME$/Documents/elbek2003.pem" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" useOpenSSHConfig="true" />
+      <sshConfig host="3.89.101.234" id="50bd62b3-257a-4ec2-9272-11ff7f5e21b2" keyPath="$USER_HOME$/Documents/elbek2003.pem" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
