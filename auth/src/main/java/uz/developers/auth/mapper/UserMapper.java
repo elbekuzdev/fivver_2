@@ -63,6 +63,8 @@ public class UserMapper {
         userDto.setSummary(user.getSummary());
         userDto.setPhoneNumber(user.getPhoneNumber());
         userDto.setEmail(user.getEmail());
+        userDto.setDistrict(user.getDistrict().getName());
+        userDto.setRegion(user.getRegion().getName());
         userDto.setLinks(linksMapper.toDto(user.getLinks()));
         return userDto;
     }

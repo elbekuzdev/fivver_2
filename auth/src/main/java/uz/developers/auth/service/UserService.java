@@ -31,9 +31,11 @@ public class UserService {
         try {
             Users user = userMapper.toEntity(usersDto);
             if (!userRepo.existsByEmailAndIsActive(user.getEmail(), true)) {
-                if (!userRepo.existsByPhoneNumberAndIsActive(user.getPhoneNumber(), true)) {
+                if (user.getPhoneNumber() == null || !userRepo.existsByPhoneNumberAndIsActive(user.getPhoneNumber(), true)) {
                     if (Objects.equals(user.getDistrict().getRegion().getId(), user.getRegion().getId())) {
                         try {
+                            System.out.println(user.getDistrict());
+                            System.out.println(user.getRegion());
                             user.setPassword(passwordUtil.encodePassword(user.getPassword()));
                             Users save = userRepo.save(user);
                             return ResponseEntity.ok(new ResponseDto(200, "saved", toResponse(save)));

@@ -1,15 +1,17 @@
 package uz.developers.auth.util;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PasswordUtils {
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public String encodePassword(String password) { //TODO security qo'shilganda buni o'zgaritib qoyiladi, yani, encodelash uchun
-        return password;
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
-    public Boolean match(String newPassword, String oldPassword) { //TODO bu ham shunday
-        return newPassword.equals(oldPassword);
+    public Boolean match(String newPassword, String oldPassword) {
+        return passwordEncoder.matches(newPassword, oldPassword);
     }
 }
