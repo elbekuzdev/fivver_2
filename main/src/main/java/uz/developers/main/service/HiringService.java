@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import uz.developers.main.dto.HashTagDto;
 import uz.developers.main.dto.HiringDto;
 import uz.developers.main.dto.ResponseDto;
 import uz.developers.main.dto.ResponseHiringDto;
@@ -72,7 +73,6 @@ public class HiringService {
             return ResponseEntity.ok(new ResponseDto(404, "id not found", null));
         }
     }
-
     public ResponseEntity<ResponseDto> deleteById(Integer id) {
         Optional<Hiring> byIdAndActive = hiringRepo.findByIdAndIsActive(id, true);
         if (byIdAndActive.isPresent() && byIdAndActive.get().getUser().getId() == getCurrentUser().getId()) {
@@ -85,9 +85,18 @@ public class HiringService {
 
         }
     }
-
     private Users getCurrentUser(){
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return  (Users) userService.loadUserByUsername(username);
     }
+
+    public List<Hiring> getAllByTitleAndTag(String title, List<HashTagDto> hashtags){
+        List<Hiring> elonlar = hiringRepo.findAll();
+        List<Hiring> matchedElonlar = new LinkedList<>();
+        for (Hiring elon : elonlar) {if (elon.getTitle().contains(title))matchedElonlar.add(elon);}
+        for (Hiring elon : elonlar) {if (SearchService.isAvailableInList(elon.getTags(),hashtags))matchedElonlar.add(elon);}
+        return matchedElonlar;
+    }
+
+
 }
