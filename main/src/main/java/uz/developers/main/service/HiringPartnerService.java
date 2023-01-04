@@ -2,14 +2,11 @@ package uz.developers.main.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import uz.developers.main.dto.HashTagDto;
 import uz.developers.main.dto.HiringPartnerDto;
 import uz.developers.main.dto.ResponseDto;
-import uz.developers.main.entity.Hashtag;
-import uz.developers.main.entity.HiringPartner;
-import uz.developers.main.entity.Partner;
-import uz.developers.main.entity.Users;
+import uz.developers.main.entity.*;
 import uz.developers.main.mapper.HiringPartnerMapper;
 import uz.developers.main.repo.HashtagRepo;
 import uz.developers.main.repo.HiringPartnerRepo;
@@ -48,8 +45,8 @@ public class HiringPartnerService {
         return hp.map(hiringPartner -> ResponseDto.getSuccess(HiringPartnerMapper.toDto(hiringPartner))).orElseGet(() -> ResponseDto.getSuccess(300, "id is invalid"));
     }
 
-    public ResponseDto update(Integer id, HiringPartnerDto hiringPartnerDto) {
-        Optional<HiringPartner> hp = hiringPartnerRepo.findById(id);
+    public ResponseDto update(HiringPartnerDto hiringPartnerDto) {
+        Optional<HiringPartner> hp = hiringPartnerRepo.findById(hiringPartnerDto.getId());
         if (hp.isPresent() && hp.get().getUser().getId() == getCurrentUser().getId()) {
             HiringPartner hiringPartner = hp.get();
             HiringPartner requestHiringPartner = HiringPartnerMapper.toEntity(hiringPartnerDto);
@@ -115,4 +112,13 @@ public class HiringPartnerService {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return (Users) userService.loadUserByUsername(email);
     }
+
+    public List<HiringPartner> getAllByTitleAndTag(String title, List<HashTagDto> hashtags){
+        List<HiringPartner> elonlar = hiringPartnerRepo.findAll();
+        List<HiringPartner> matchedElonlar = new LinkedList<>();
+        for (HiringPartner elon : elonlar) {if (elon.getTitle().contains(title))matchedElonlar.add(elon);}
+        for (HiringPartner elon : elonlar) {if (SearchService.isAvailableInList(elon.getTags(),hashtags))matchedElonlar.add(elon);}
+        return matchedElonlar;
+    }
+
 }
